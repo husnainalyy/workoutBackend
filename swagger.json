@@ -9,6 +9,10 @@
         {
             "url": "http://localhost:5000/api",
             "description": "Local server"
+        },
+        {
+            "url": "https://workoutbackend-production.up.railway.app/api",
+            "description": "Production server"
         }
     ],
     "tags": [
