@@ -3,7 +3,7 @@
     "info": {
         "title": "Your Workout Tracking App Backend API",
         "version": "1.0.0",
-        "description": "API documentation for the backend of a workout tracking application. The API provides endpoints for managing user feedback, user profiles, and webhook events from Clerk."
+        "description": "API documentation for the backend of a workout tracking application. The API provides endpoints for managing user feedback, user profiles, machines, variations, and webhook events from Clerk."
     },
     "servers": [
         {
@@ -12,7 +12,6 @@
         }
     ],
     "tags": [
-        
         {
             "name": "Users",
             "description": "User management endpoints for updating and deleting user profiles"
@@ -20,10 +19,17 @@
         {
             "name": "Feedback",
             "description": "Feedback management endpoints for submitting and retrieving user feedback"
+        },
+        {
+            "name": "Machines",
+            "description": "Endpoints for creating, retrieving, updating, and deleting machines"
+        },
+        {
+            "name": "Variations",
+            "description": "Endpoints for creating, retrieving, updating, and deleting variations"
         }
     ],
     "paths": {
-       
         "/users/profile": {
             "get": {
                 "summary": "Get user profile",
@@ -197,6 +203,324 @@
                     }
                 }
             }
+        },
+        "/machines": {
+            "post": {
+                "summary": "Create machine",
+                "description": "Create a new machine for the authenticated user.",
+                "tags": [
+                    "Machines"
+                ],
+                "requestBody": {
+                    "description": "Machine data to create",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Machine created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Machine"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request. Machine name is required."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get user machines",
+                "description": "Retrieve all machines belonging to the authenticated user.",
+                "tags": [
+                    "Machines"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Machines retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Machine"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/machines/{id}": {
+            "put": {
+                "summary": "Update machine",
+                "description": "Update an existing machine for the authenticated user.",
+                "tags": [
+                    "Machines"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machine ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Machine data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MachineInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Machine updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Machine"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request. New machine name is required."
+                    },
+                    "404": {
+                        "description": "Machine not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete machine",
+                "description": "Delete a machine belonging to the authenticated user.",
+                "tags": [
+                    "Machines"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Machine ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Machine deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Machine not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/variations": {
+            "post": {
+                "summary": "Create variation",
+                "description": "Create a new variation for the authenticated user.",
+                "tags": [
+                    "Variations"
+                ],
+                "requestBody": {
+                    "description": "Variation data to create",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VariationInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Variation created successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Variation"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request. Variation name is required."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get user variations",
+                "description": "Retrieve all variations belonging to the authenticated user.",
+                "tags": [
+                    "Variations"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Variations retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Variation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/variations/{id}": {
+            "put": {
+                "summary": "Update variation",
+                "description": "Update an existing variation for the authenticated user.",
+                "tags": [
+                    "Variations"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Variation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Variation data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VariationInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Variation updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Variation"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request. New variation name is required."
+                    },
+                    "404": {
+                        "description": "Variation not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete variation",
+                "description": "Delete a variation belonging to the authenticated user.",
+                "tags": [
+                    "Variations"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Variation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Variation deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Variation not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -307,6 +631,64 @@
                         ]
                     }
                 }
+            },
+            "Machine": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "MachineInput": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name"
+                ]
+            },
+            "Variation": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "VariationInput": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name"
+                ]
             }
         }
     },
