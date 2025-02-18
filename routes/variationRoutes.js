@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const variationController = require('../controllers/variationController');
-const authenticateUserByClerkId = require('../Middlewares/authenticateUserByClerkId');
+const authenticateUserByClerkId = require('../middlewares/authenticateUserByClerkId');
 
 router.use(authenticateUserByClerkId);
 

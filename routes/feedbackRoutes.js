@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const feedbackController = require('../controllers/feedbackController.js');
-const authenticateUserByClerkId = require('../Middlewares/authenticateUserByClerkId.js');
+const authenticateUserByClerkId = require('../middlewares/authenticateUserByClerkId.js');
 
 
 
