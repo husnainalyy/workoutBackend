@@ -1,0 +1,318 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Your Workout Tracking App Backend API",
+        "version": "1.0.0",
+        "description": "API documentation for the backend of a workout tracking application. The API provides endpoints for managing user feedback, user profiles, and webhook events from Clerk."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000/api",
+            "description": "Local server"
+        }
+    ],
+    "tags": [
+        
+        {
+            "name": "Users",
+            "description": "User management endpoints for updating and deleting user profiles"
+        },
+        {
+            "name": "Feedback",
+            "description": "Feedback management endpoints for submitting and retrieving user feedback"
+        }
+    ],
+    "paths": {
+       
+        "/users/profile": {
+            "get": {
+                "summary": "Get user profile",
+                "description": "Retrieve the profile of the authenticated user.",
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User profile retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update user profile",
+                "description": "Update the profile details of the authenticated user.",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "description": "User profile data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (e.g., invalid membership type or duplicate username)."
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/users": {
+            "delete": {
+                "summary": "Delete user permanently",
+                "description": "Permanently delete the authenticated user's account.",
+                "tags": [
+                    "Users"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User account deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/feedback/": {
+            "post": {
+                "summary": "Create feedback",
+                "description": "Submit feedback for the authenticated user.",
+                "tags": [
+                    "Feedback"
+                ],
+                "requestBody": {
+                    "description": "Feedback data to create",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FeedbackInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Feedback submitted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Feedback"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request. Rating is out of allowed range or required fields are missing."
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        },
+        "/feedback/my-feedback": {
+            "get": {
+                "summary": "Get user's feedback history",
+                "description": "Retrieve all feedback entries submitted by the authenticated user.",
+                "tags": [
+                    "Feedback"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Feedback history retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Feedback"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ClerkAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "Authorization",
+                "description": "Provide your Clerk token in the format 'Clerk <token>'"
+            }
+        },
+        "schemas": {
+            "Feedback": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "userLikes": {
+                        "type": "string"
+                    },
+                    "wantImprovements": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "others": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "FeedbackInput": {
+                "type": "object",
+                "properties": {
+                    "userLikes": {
+                        "type": "string"
+                    },
+                    "wantImprovements": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "others": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "rating"
+                ]
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "membership": {
+                        "type": "string",
+                        "enum": [
+                            "premium",
+                            "freemium"
+                        ]
+                    }
+                }
+            },
+            "UserUpdate": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "membership": {
+                        "type": "string",
+                        "enum": [
+                            "premium",
+                            "freemium"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        {
+            "ClerkAuth": []
+        }
+    ]
+}
