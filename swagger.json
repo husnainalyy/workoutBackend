@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Your Workout Tracking App Backend API",
+        "title": "Your Workout Tracking App Backend API Documentation",
         "version": "1.0.0",
         "description": "API documentation for the backend of a workout tracking application. The API provides endpoints for managing user feedback, user profiles, machines, variations, and webhook events from Clerk."
     },
